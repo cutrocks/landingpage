@@ -39,7 +39,7 @@ pipeline {
           name: landingpage
           namespace: landingpage
         spec:
-          replicas: 2
+          replicas: 3
           selector:
             matchLabels:
               app: landing
