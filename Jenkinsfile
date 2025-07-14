@@ -32,44 +32,44 @@ pipeline {
     stage('Deploy to Kubernetes') {
       steps {
         sh '''
-        cat <<EOF | kubectl apply -f -
-        apiVersion: apps/v1
-        kind: Deployment
-        metadata:
-          name: landingpage
-          namespace: landingpage
-        spec:
-          replicas: 3
-          selector:
-            matchLabels:
-              app: landing
-          template:
-            metadata:
-              labels:
-                app: landing
-            spec:
-              containers:
-              - name: landing
-                image: $IMAGE
-                ports:
-                - containerPort: 80
-              imagePullSecrets:
-              - name: regcred
-        ---
-        apiVersion: v1
-        kind: Service
-        metadata:
-          name: landingpage-svc
-          namespace: landingpage
-        spec:
-          type: NodePort
-          selector:
-            app: landing
-          ports:
-          - port: 80
-            targetPort: 80
-            nodePort: 30080
-        EOF
+cat <<EOF | kubectl apply -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: landingpage
+  namespace: landingpage
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: landing
+  template:
+    metadata:
+      labels:
+        app: landing
+    spec:
+      containers:
+      - name: landing
+        image: $IMAGE
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: landingpage-svc
+  namespace: landingpage
+spec:
+  type: NodePort
+  selector:
+    app: landing
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30080
+EOF
         '''
       }
     }
